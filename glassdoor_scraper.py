@@ -9,7 +9,7 @@ from selenium.common.exceptions import NoSuchElementException, ElementClickInter
 from selenium import webdriver
 import time
 import pandas as pd
-keyword = 'business-intelligence-analyst-jobs'
+# keyword = 'business-intelligence-analyst-jobs'
 path = "/home/junior/Documents/bia_skills_proj/chromedriver"
 
 def get_jobs(keyword, num_jobs, verbose, path, slp_time):
@@ -20,13 +20,14 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
     options = webdriver.ChromeOptions()
     
     #Uncomment the line below if you'd like to scrape without a new Chrome window every time.
-    #options.add_argument('headless')
+    options.add_argument('headless')
     
     #Change the path to where chromedriver is in your home folder.
     driver = webdriver.Chrome(executable_path=path, options=options)
     driver.set_window_size(1120, 1000)
 
-    url = "https://www.glassdoor.co.uk/Job/" + keyword +"-SRCH_KO0,29.htm"
+    url = "https://www.glassdoor.co.uk/Job/" + keyword + "-SRCH_IL.0,7_IC3300986_KO8,37.htm?radius=100"
+    # url = "https://www.glassdoor.co.uk/Job/" + keyword +"-SRCH_KO0,29.htm" 
     driver.get(url)
     jobs = []
 
@@ -72,10 +73,10 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
                 except:
                     time.sleep(2)
 
-            try:
-                salary_estimate = driver.find_element_by_xpath('.//span[@class="tab active"]').text
-            except NoSuchElementException:
-                salary_estimate = -1 #You need to set a "not found value. It's important."
+            # try:
+            #     salary_estimate = driver.find_element_by_xpath('.//span[@class="tab active"]').text
+            # except NoSuchElementException:
+            #     salary_estimate = -1 #You need to set a "not found value. It's important."
             
             try:
                 rating = driver.find_element_by_xpath('.//span[@class="rating"]').text
@@ -85,7 +86,7 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
             #Printing for debugging
             if verbose:
                 print("Job Title: {}".format(job_title))
-                print("Salary Estimate: {}".format(salary_estimate))
+                # print("Salary Estimate: {}".format(salary_estimate))
                 print("Job Description: {}".format(job_description[:500]))
                 print("Rating: {}".format(rating))
                 print("Company Name: {}".format(company_name))
@@ -97,24 +98,24 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
             try:
                 driver.find_element_by_xpath('.//div[@class="tab" and @data-tab-type="overview"]').click()
 
-                try:
-                    #<div class="infoEntity">
-                    #    <label>Headquarters</label>
-                    #    <span class="value">San Francisco, CA</span>
-                    #</div>
-                    headquarters = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Headquarters"]//following-sibling::*').text
-                except NoSuchElementException:
-                    headquarters = -1
+                # try:
+                #     #<div class="infoEntity">
+                #     #    <label>Headquarters</label>
+                #     #    <span class="value">San Francisco, CA</span>
+                #     #</div>
+                #     headquarters = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Headquarters"]//following-sibling::*').text
+                # except NoSuchElementException:
+                #     headquarters = -1
 
                 try:
                     size = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Size"]//following-sibling::*').text
                 except NoSuchElementException:
                     size = -1
 
-                try:
-                    founded = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Founded"]//following-sibling::*').text
-                except NoSuchElementException:
-                    founded = -1
+                # try:
+                #     founded = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Founded"]//following-sibling::*').text
+                # except NoSuchElementException:
+                #     founded = -1
 
                 try:
                     type_of_ownership = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Type"]//following-sibling::*').text
@@ -136,47 +137,48 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
                 except NoSuchElementException:
                     revenue = -1
 
-                try:
-                    competitors = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Competitors"]//following-sibling::*').text
-                except NoSuchElementException:
-                    competitors = -1
+                # try:
+                #     competitors = driver.find_element_by_xpath('.//div[@class="infoEntity"]//label[text()="Competitors"]//following-sibling::*').text
+                # except NoSuchElementException:
+                #     competitors = -1
 
             except NoSuchElementException:  #Rarely, some job postings do not have the "Company" tab.
-                headquarters = -1
+                # headquarters = -1
                 size = -1
-                founded = -1
-                type_of_ownership = -1
+                # founded = -1
+                # type_of_ownership = -1
                 industry = -1
                 sector = -1
                 revenue = -1
-                competitors = -1
+                # competitors = -1
 
                 
             if verbose:
-                print("Headquarters: {}".format(headquarters))
+                # print("Headquarters: {}".format(headquarters))
                 print("Size: {}".format(size))
-                print("Founded: {}".format(founded))
+                # print("Founded: {}".format(founded))
                 print("Type of Ownership: {}".format(type_of_ownership))
                 print("Industry: {}".format(industry))
                 print("Sector: {}".format(sector))
                 print("Revenue: {}".format(revenue))
-                print("Competitors: {}".format(competitors))
+                # print("Competitors: {}".format(competitors))
                 print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 
             jobs.append({"Job Title" : job_title,
-            "Salary Estimate" : salary_estimate,
+            # "Salary Estimate" : salary_estimate,
             "Job Description" : job_description,
             "Rating" : rating,
             "Company Name" : company_name,
             "Location" : location,
-            "Headquarters" : headquarters,
+            # "Headquarters" : headquarters,
             "Size" : size,
-            "Founded" : founded,
+            # "Founded" : founded,
             "Type of ownership" : type_of_ownership,
             "Industry" : industry,
             "Sector" : sector,
             "Revenue" : revenue,
-            "Competitors" : competitors})
+            # "Competitors" : competitors
+            })
             #add job to jobs
 
         #Clicking on the "next page" button
