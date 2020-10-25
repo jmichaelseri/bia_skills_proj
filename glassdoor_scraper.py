@@ -20,7 +20,7 @@ def get_jobs(keyword, num_jobs, verbose, path, slp_time):
     options = webdriver.ChromeOptions()
     
     #Uncomment the line below if you'd like to scrape without a new Chrome window every time.
-    options.add_argument('headless')
+    # options.add_argument('headless')
     
     #Change the path to where chromedriver is in your home folder.
     driver = webdriver.Chrome(executable_path=path, options=options)
